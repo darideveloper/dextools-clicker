@@ -6,7 +6,7 @@ import config
 import globals
 from scraping_manager.automate import Web_scraping
 
-def click_button (name, scraper, selector, close_tab=True): 
+def click_button (name, scraper, selector, close_tab=True, inside_selector=""): 
     """Click in specific button in the page with css selector
 
     Args:
@@ -20,16 +20,22 @@ def click_button (name, scraper, selector, close_tab=True):
     try:
         # Open link / click in button
         scraper.click(selector)
-        
-        # Close the new tab
-        if close_tab: 
-            time.sleep(1)
-            scraper.switch_to_tab(1)
-            scraper.close_tab()
-            scraper.switch_to_tab(0)
     except: 
         text = f"{name} button not found."
     else: 
+        
+        # Close the new tab
+        if close_tab: 
+            scraper.switch_to_tab(1)
+            time.sleep(3)
+            
+            # Wait to page load with js
+            if inside_selector: 
+                scraper.wait_load(inside_selector)
+            
+            scraper.close_tab()
+            scraper.switch_to_tab(0)
+            
         text = f"{name} button clicked."
     finally:
         log.info(text, print_text=True)
@@ -54,8 +60,13 @@ def main (url):
     selector_trade = "a.btn.btn-salmon.btn-icon-absolute.ng-star-inserted"
     selector_fav = ".btn.btn-success.btn-icon-absolute.ng-star-inserted"
     
+    # Internal selector for the new page opened 
+    selector_twitter_inside = '.r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64.r-deolkf.r-homxoj.r-poiln3'
+    selector_twitter_inside += '.r-7cikom.r-1ny4l3l.r-xyw6el.r-641cr4.r-1dz5y72.r-fdjqy7.r-13qz1uu'
+    
     # Open first buttons
-    click_button("Twitter", scraper, selector_twitter)
+    click_button("Twitter", scraper, selector_twitter, 
+                 inside_selector=selector_twitter_inside)
     click_button("Reddit", scraper, selector_reddit)
     click_button("Telegram", scraper, selector_telegram)
     click_button("Trade", scraper, selector_trade)
