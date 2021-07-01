@@ -2,6 +2,7 @@ import os
 import sys
 import log
 import time
+import json
 import config
 import globals
 from scraping_manager.automate import Web_scraping
@@ -46,10 +47,10 @@ def main (
         url, loops, twitter_run, reddit_run, telegram_run, trade_run, fav_run, 
         share_twitter_run, share_telegram_run, share_reddit_run): 
     
-    print (twitter_run, reddit_run, telegram_run, trade_run, fav_run, 
-        share_twitter_run, share_telegram_run, share_reddit_run)
+    log.info(url)
     
-    # proxy loop
+    
+    # TODO: Update proxy
     
     # open URL and wait to load page
     scraper = Web_scraping(url, headless=False)
@@ -171,6 +172,22 @@ if __name__ == "__main__":
             share_twitter = True 
             share_telegram = True
             share_reddit = True
+            
+        elif third_argv == "file": 
+            
+            # Open json setting file
+            json_path = os.path.join (os.path.dirname(__file__), "buttons.json")
+            with open (json_path) as file: 
+                data = json.loads(file.read())
+                
+            twitter = data["twitter"] 
+            reddit = data["reddit"] 
+            telegram = data["telegram"] 
+            trade = data["trade"] 
+            fav = data["fav"] 
+            share_twitter = data["share_twitter"]  
+            share_telegram = data["share_telegram"] 
+            share_reddit = data["share_reddit"] 
             
         else:
             
