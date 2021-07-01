@@ -74,25 +74,33 @@ def main (
     proxy_user = data["proxy_user"]
     proxy_pass = data["proxy_pass"]
     proxy = f"https://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
+    log.info (f"Proxy: {proxy}", print_text=True)
     
     # Web scraping instance with proxy
     scraper = Web_scraping("about:blank", 
                            headless=False,  
                            proxy_server=proxy_server,
-                           proxy_port=proxy_port)
+                           proxy_port=proxy_port, 
+                           proxy_user=proxy_user, 
+                           proxy_pass=proxy_pass)
     
     for loop_counter in range(loops): 
         
-        log.info(f"\nLoop {loop_counter+1} of {loops}", print_text=True)
-        input("End?")
-    
+        log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True)    
         
-        # open URL and wait to load page
-        scraper.set_page(url)
-        log.info("Loading page...", print_text=True)
-        selector_span = ".ng-trigger.ng-trigger-simpleFadeAnimation.ng-star-inserted"
-        scraper.wait_load(selector_span)
-        scraper.refresh_selenium()
+        # loop for open URL and wait to load page
+        while True: 
+            scraper.set_page(url)
+            log.info("Loading page...", print_text=True)
+            selector_span = ".ng-trigger.ng-trigger-simpleFadeAnimation.ng-star-inserted"
+            
+            try: 
+                scraper.wait_load(selector_span, time_out=30)
+            except: 
+                log.info ("The page took too long to load. retrying.", print_text=True)
+            else: 
+                scraper.refresh_selenium()
+                break
         
         # Social, platforms, share an internal selectores
         selector_twitter = "i.fa.fa-twitter.text-light"

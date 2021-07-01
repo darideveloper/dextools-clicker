@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import logging
+import zipfile
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
@@ -33,6 +34,7 @@ class Web_scraping ():
         self.__proxy_port = proxy_port
         self.__proxy_user = proxy_user
         self.__proxy_pass = proxy_pass
+        self.__pluginfile = 'proxy_auth_plugin.zip'
         
         # Desable modules logs
         logging.disable(logging.DEBUG)
@@ -73,9 +75,17 @@ class Web_scraping ():
         # Set proxy without autentication
         if (self.__proxy_server and self.__proxy_port 
             and not self.__proxy_user and not self.__proxy_pass):
+            
             proxy = f"{self.__proxy_server}:{self.__proxy_port}"
-            input (proxy)
             options.add_argument(f"--proxy-server={proxy}")
+        
+        # Set proxy with autentification 
+        if (self.__proxy_server and self.__proxy_port 
+            and self.__proxy_user and self.__proxy_pass):
+            
+            self.__create_proxy_extesion()
+            options.add_extension(self.__pluginfile)
+        
         
         # Set configuration to  and create instance
         chromedriver = ChromeDriverManager(chrome_type=ChromeType.GOOGLE, 
@@ -91,6 +101,67 @@ class Web_scraping ():
 
             # Wait to load page
             # time.sleep (self.basetime*5)
+            
+    def __create_proxy_extesion (self): 
+        """Create a proxy chrome extension"""
+        
+        # plugin data
+        manifest_json = """
+        {
+            "version": "1.0.0",
+            "manifest_version": 2,
+            "name": "Chrome Proxy",
+            "permissions": [
+                "proxy",
+                "tabs",
+                "unlimitedStorage",
+                "storage",
+                "<all_urls>",
+                "webRequest",
+                "webRequestBlocking"
+            ],
+            "background": {
+                "scripts": ["background.js"]
+            },
+            "minimum_chrome_version":"22.0.0"
+        }
+        """
+
+        background_js = """
+        var config = {
+                mode: "fixed_servers",
+                rules: {
+                singleProxy: {
+                    scheme: "http",
+                    host: "%s",
+                    port: parseInt(%s)
+                },
+                bypassList: ["localhost"]
+                }
+            };
+
+        chrome.proxy.settings.set({value: config, scope: "regular"}, function() {});
+
+        function callbackFn(details) {
+            return {
+                authCredentials: {
+                    username: "%s",
+                    password: "%s"
+                }
+            };
+        }
+
+        chrome.webRequest.onAuthRequired.addListener(
+                    callbackFn,
+                    {urls: ["<all_urls>"]},
+                    ['blocking']
+        );
+        """ % (self.__proxy_server, self.__proxy_port, self.__proxy_user, self.__proxy_pass)
+
+        # Compress file
+        with zipfile.ZipFile(self.__pluginfile, 'w') as zp:
+            zp.writestr("manifest.json", manifest_json)
+            zp.writestr("background.js", background_js)
     
     def screenshot (self, base_name):
         """
