@@ -1,9 +1,39 @@
 import os
 import sys
 import log
+import time
 import config
 import globals
 from scraping_manager.automate import Web_scraping
+
+def click_button (name, scraper, selector, close_tab=True): 
+    """Click in specific button in the page with css selector
+
+    Args:
+        name (str): Name of the button (for print in therminal)
+        scraper (Web_scraping): Web scraping instance (based on selenium)
+        selector (str): Css selector of the button
+        close_tab (bool, optional): Close the current tab after click. Defaults to True.
+    """
+    
+    # Try to click in button
+    try:
+        # Open link / click in button
+        scraper.click(selector)
+        
+        # Close the new tab
+        if close_tab: 
+            time.sleep(1)
+            scraper.switch_to_tab(1)
+            scraper.close_tab()
+            scraper.switch_to_tab(0)
+    except: 
+        text = f"{name} button not found."
+    else: 
+        text = f"{name} button clicked."
+    finally:
+        log.info(text, print_text=True)
+    
 
 def main (url): 
     
@@ -17,51 +47,22 @@ def main (url):
     scraper.wait_load(selector_span)
     scraper.refresh_selenium()
     
-    # List of all links in the page
-    links_found = [] 
-    
-    # Get all social buttons
-    selector_buttons = ".d-inline-block.align-bottom > a.ng-star-inserted"
-    elems = scraper.get_elems(selector_buttons)
-    socials = ["Twitter", "Reddit", "Telegram"]
-    for index in range(1, len(elems)+1):
-    
-        link_selector = selector_buttons + f":nth-child({index})"        
-        link = scraper.get_attrib(link_selector, "href")
-        
-        icon_selector = link_selector + " > i.text-light"
-        icon_classes = scraper.get_attrib(icon_selector, "class")
-        
-        # Save social links
-        if icon_classes:
-            for social in socials: 
-                if str(social).lower() in icon_classes: 
-                    links_found.append(link)
-                    messsage = f"{social} button found"
-                    log.info(messsage, print_text=True)
-                    socials.remove(social)                
-                
-                
-    
-    # Click trade 
+    # social and platform buttons selectors
+    selector_twitter = "i.fa.fa-twitter.text-light"
+    selector_reddit = "i.fa.fa-reddit.text-light"
+    selector_telegram = "i.fa.fa-telegram.text-light"
     selector_trade = "a.btn.btn-salmon.btn-icon-absolute.ng-star-inserted"
-    link_trade = scraper.get_attrib(selector_trade, "href")
-    links_found.append(link_trade)
-    text = "Trade button found."
-    log.info(text, print_text=True)
-    
-    # Click favorite button
     selector_fav = ".btn.btn-success.btn-icon-absolute.ng-star-inserted"
-    scraper.click(selector_fav)    
-    text = "Favorite button found"
-    log.info(text, print_text=True)
     
-    # Open al links
-    print ("Openning all links...")
-    for link in links_found: 
-        scraper.set_page_js(link, new_tab=False)
+    # Open first buttons
+    click_button("Twitter", scraper, selector_twitter)
+    click_button("Reddit", scraper, selector_reddit)
+    click_button("Telegram", scraper, selector_telegram)
+    click_button("Trade", scraper, selector_trade)
+    click_button("Favorite", scraper, selector_fav, close_tab=False)
+
     
-    # input ("Press Enter to end.")
+    input ("Press Enter to end.")
         
     # Close all tabs in browser
     scraper.end_browser()
