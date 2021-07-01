@@ -27,7 +27,7 @@ def click_button (name, scraper, selector, close_tab=True, inside_selector=""):
         # Close the new tab
         if close_tab: 
             scraper.switch_to_tab(1)
-            time.sleep(3)
+            time.sleep(5)
             
             # Wait to page load with js
             if inside_selector: 
@@ -61,8 +61,8 @@ def main (url):
     selector_fav = ".btn.btn-success.btn-icon-absolute.ng-star-inserted"
     
     # Internal selector for the new page opened 
-    selector_twitter_inside = '.r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64.r-deolkf.r-homxoj.r-poiln3'
-    selector_twitter_inside += '.r-7cikom.r-1ny4l3l.r-xyw6el.r-641cr4.r-1dz5y72.r-fdjqy7.r-13qz1uu'
+    selector_twitter_inside = '.r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64.r-deolkf'
+    selector_twitter_inside += '.r-7cikom.r-1ny4l3l.r-xyw6el.r-641cr4.r-1dz5y72'
     
     # Open first buttons
     click_button("Twitter", scraper, selector_twitter, 
@@ -71,7 +71,24 @@ def main (url):
     click_button("Telegram", scraper, selector_telegram)
     click_button("Trade", scraper, selector_trade)
     click_button("Favorite", scraper, selector_fav, close_tab=False)
-
+    
+    # Share button and share socials
+    selector_share = ".fa.fa-share-alt"
+    selector_share_twitter = ".btn-twitter.btn-outline-info"
+    selector_share_telegram = ".btn-telegram.btn-outline-info"
+    selector_share_reddit = ".btn-reddit.btn-outline-salmon"
+    
+    # internal selector for the new page opened 
+    selector_share_twitter_iside = ".r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64"
+    selector_share_twitter_iside += ".r-7cikom.r-1ny4l3l.r-t60dpp.r-1dz5y72"
+    
+    # Open share buttons
+    click_button("Share", scraper, selector_share, close_tab=False)
+    scraper.refresh_selenium()
+    click_button("Share twitter", scraper, selector_share_twitter, 
+                 inside_selector=selector_share_twitter_iside)
+    click_button("Share telegram", scraper, selector_share_telegram)
+    click_button("Share reddit", scraper, selector_share_reddit)
     
     input ("Press Enter to end.")
         
