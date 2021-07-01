@@ -16,7 +16,9 @@ class Web_scraping ():
     Class to manage and configure web browser
     """
     
-    def __init__ (self, web_page="", headless=True, time_out=0): 
+    def __init__ (
+            self, web_page="", headless=True, time_out=0, 
+            proxy_server="", proxy_port="", proxy_user="", proxy_pass=""): 
         """
         Constructor of the class
         """
@@ -27,6 +29,10 @@ class Web_scraping ():
         self.__headless = headless
         self.__current_dir = os.path.dirname (__file__)
         self.__web_page = web_page
+        self.__proxy_server = proxy_server
+        self.__proxy_port = proxy_port
+        self.__proxy_user = proxy_user
+        self.__proxy_pass = proxy_pass
         
         # Desable modules logs
         logging.disable(logging.DEBUG)
@@ -63,7 +69,14 @@ class Web_scraping ():
         if self.__headless:        
             options.add_argument("--window-size=1920,1080")
             options.add_argument("--headless")
-            
+        
+        # Set proxy without autentication
+        if (self.__proxy_server and self.__proxy_port 
+            and not self.__proxy_user and not self.__proxy_pass):
+            proxy = f"{self.__proxy_server}:{self.__proxy_port}"
+            input (proxy)
+            options.add_argument(f"--proxy-server={proxy}")
+        
         # Set configuration to  and create instance
         chromedriver = ChromeDriverManager(chrome_type=ChromeType.GOOGLE, 
                                             log_level='0', 

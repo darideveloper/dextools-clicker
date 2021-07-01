@@ -64,14 +64,28 @@ def main (
     
     log.info(f"Current page: {url}", print_text=True)
     
-    # Web scraping instance
-    scraper = Web_scraping("about:blank", headless=False)
+    # Get proxy
+    config_path = os.path.join (os.path.dirname(__file__), "config.json")
+    with open (config_path) as file: 
+        data = json.loads(file.read())
+    
+    proxy_server = data["proxy_server"]
+    proxy_port = data["proxy_port"]
+    proxy_user = data["proxy_user"]
+    proxy_pass = data["proxy_pass"]
+    proxy = f"https://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
+    
+    # Web scraping instance with proxy
+    scraper = Web_scraping("about:blank", 
+                           headless=False,  
+                           proxy_server=proxy_server,
+                           proxy_port=proxy_port)
     
     for loop_counter in range(loops): 
         
         log.info(f"\nLoop {loop_counter+1} of {loops}", print_text=True)
+        input("End?")
     
-        # TODO: Update proxy
         
         # open URL and wait to load page
         scraper.set_page(url)
