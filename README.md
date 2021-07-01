@@ -1,7 +1,29 @@
-# [PROJECT NAME]
+# DEXTOOLS CLICKER
 **python version: 3.9**
 
-[DESCRIPTION]
+Web automation script, to **click on specific buttons** within the pages of the domain **www.dextools.io/app/uniswap/pair-explorer/**, implementing **proxies**.
+
+## Supported buttons
+
+### Social buttons
+* **Twitter**
+* **Reddit**
+* **Telegram**
+
+![social buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/social.png)
+
+### Platform buttons
+* **Favorite**
+* **Trade**
+
+![Platform buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/platform.png)
+
+### Share buttons
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
+
+![Share buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/share.png)
 
 
 # Install
@@ -21,41 +43,204 @@ To run the project, the following programs must be installed::
 
 # Run the program
 
-## GUI
+Run the **project folder** (dextools clicker) or the **__main __.py** file, with your **python 3.9** interpreter
 
-For **start** the program with **graphic interface**, **run** the file **__ main__.py** with you **python 3.9** interpreter.
+Example: 
 
-The graphical interface, in addition to allowing you to run the program, will make it easier for you to configure it (more details in the configuration section).
+``` bash
+$ py dextools-clicker
+$ py dextools clicker\__main__.py
+```
 
-![Home]([img url])
+# Setting
 
-## Terminal
+To successfully run the program, the following **arguments must be sent, in order**, from the terminal. 
 
-To **start** the program **in terminal** / without interfaz, **run** the **crimegrade_scraper.py** file with your **python 3.9** interpreter.
+|Argument|Description|Type|Example
+|---|---|---|---|
+|**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4f...|
+|**loop**|Number of **times** the process **will be repeated on the page**, with different proxies.|Integer|10|
+|**buttons**|One or more arguments, which indicate **which buttons are or aren't pressed** on the page.|String or Boolean|all|
 
-Executing the program in this way **it will not be possible to update the configurations** and it will be executed with the **last configuration** (more details in the next).
+Example: 
 
-Ejecutando el programa de esta forma **no se podrán actualizar las configuraciones** y se ejecutará con la **última configuración establecida** (mas detalles en la sección de configuración). 
+``` bash
+# Run the program 10 times, using all buttons
+# py dextools-clicker url loops buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 10 all
+```
 
-# Configuration / setting
+## Buttons
 
-## Home
+### All
 
-![Config screen 1]([img url])
+With the keyword **"all"** (ignore uppercase and lowercase), the actions of **all buttons** will be performed:
+* **Twitter**
+* **Reddit**
+* **Telegram**
+* **Favorite**
+* **Trade**
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
 
-On the home screen, you must **write the name of the table** where the **scraping data** will be **saved**.
-If the **table does not exist** in the database, **the program will create it**.
+Example: 
 
-### DATABASE
+``` bash
+# Run the program 10 times, using all buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 10 all
+```
 
-![Config screen 2]([img url])
+### Socials
 
-To configure the database, we need to set our credentials:
-* **Server**
-* **Database name**
-* **User**
-* **Password**
+With the keyword **"social"** (ignore uppercase and lowercase), the actions of the **social buttons** will only be performed:
+* **Twitter**
+* **Reddit**
+* **Telegram**
 
-## config.json
+Example: 
 
-All **configurations** are saved in the **config.json file**, so **you can edit it manually** without the graphical interface.
+``` bash
+# Run the program 20 times, using only socials buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 20 socials
+```
+
+### Platform
+
+With the keyword **"platform"** (ignore uppercase and lowercase), the actions of only the **platform's** unique **buttons** will be performed:
+* **Favorite**
+* **Trade**
+
+Example: 
+
+``` bash
+# Run the program 100 times, using only platform buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 100 platform
+```
+
+### Share
+
+With the keyword **"share"** (ignore uppercase and lowercase), the actions of only the **share buttons** will be performed:
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
+
+Example: 
+
+``` bash
+# Run the program 100 times, using only platform buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 200 platform
+```
+
+### File
+
+With the keyword **"file"** (ignore uppercase and lowercase), the **actions specified in the buttons.json** file will be performed.
+You can edit the document with any text or code editor.
+
+buttons.json file
+``` bash
+{
+    "twitter": true, 
+    "reddit": false,
+    "telegram": true,
+    "trade": true,
+    "fav": false,
+    "share_twitter": false, 
+    "share_telegram": true,
+    "share_reddit": false
+}
+```
+
+Note: in the buttons.json file (unlike the "custom" section), **only true or false values are valid** (upper and lower case does matter).
+
+Example: 
+
+``` bash
+# With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 file
+```
+
+### Custom
+
+You can **specify** which **buttons to execute exactly**, from the **terminal**.
+
+**After** the variable **"loop"**, **each** of the following **values** will **represent** whether or not to execute a **specific button**, considering the following **order**:
+
+1. **Twitter**
+2. **Reddit**
+3. **Telegram**
+4. **Favorite**
+5. **Trade**
+6. **Share on twitter**
+7. **Share on reddit**
+8. **Share on telegram**
+
+If **less than 8** True and False **values** are specified, **all missing values** will be considered **False**.
+
+Examples: 
+
+``` bash
+# Run only the Twitter button.
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 true
+```
+
+``` bash
+# Run only the Telegram button.
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true
+```
+
+``` bash
+# Run Telegram and Favorite buttons.
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true true
+```
+
+``` bash
+# Run all buttons except twitter and telegram
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true true true true true true
+```
+
+``` bash
+# Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false true false true false true false true
+```
+
+#### True values
+From terminal, **any text other than the following** (ignore case) will be considered as **true**:
+* **False**
+* **0** (zero),
+* **None**
+* **Null**
+* **N/A**
+* Empty String ( **""** or **''** )
+
+Example: 
+``` bash
+# Run all buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 true True a 1 run sample_text "my text" "run this button"
+```
+
+#### False values
+**Only the following values** will be considered as **false** (ignore case):
+* **False**
+* **0** (zero),
+* **None**
+* **Null**
+* **N/A**
+* Empty String ( **""** or **''** )
+
+Example: 
+``` bash
+# Do not run any buttons
+$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false False 0 None null n/a "" ''
+```
+
+### Not found button
+
+If the program does **not find** a specified **button** to use, the program will **not stop**.
+
+You can **check the history** of which **buttons** were **used** on each page, as well as which **buttons** were **not found**, in the **.log** file
+
+## Config.json
+
+TO DO
+
