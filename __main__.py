@@ -12,8 +12,10 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
     Args:
         name (str): Name of the button (for print in therminal)
         scraper (Web_scraping): Web scraping instance (based on selenium)
-        selector (str): Css selector of the button
+        selector (str): CSS selector of the button
+        run (bool): Run or not the acction in the current button
         close_tab (bool, optional): Close the current tab after click. Defaults to True.
+        inside_selector(str): CSS selector inside the new tab, for wait to load the new page
     """
     
     if run:
@@ -45,6 +47,20 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
 def main (
         url, loops, twitter_run, reddit_run, telegram_run, trade_run, fav_run, 
         share_twitter_run, share_telegram_run, share_reddit_run): 
+    """Run the acction in order for all butons in the page 
+
+    Args:
+        url (bool): The url of the page to automate
+        loops (bool): Number of repetitions to do in the page
+        twitter_run (bool): Run or not the twitter button
+        reddit_run (bool): Run or not the reddit button
+        telegram_run (bool): Run or not the telegram button
+        trade_run (bool): Run or not the trade button
+        fav_run (bool): Run or not the favorite button
+        share_twitter_run (bool): Run or not the twitter share button
+        share_telegram_run (bool): Run or not the telegram share button
+        share_reddit_run (bool): Run or not the reddit share button
+    """
     
     log.info(f"Current page: {url}", print_text=True)
     
@@ -111,6 +127,14 @@ def main (
     
 
 if __name__ == "__main__":
+    """Run main function with terminal arguments
+
+    Raises:
+        AttributeError: Very few arguments. The program does not accept less than 3 arguments
+        AttributeError: Too many arguments. The program does not accept more than 10 arguments
+        AttributeError: Invalid url. The program only accepts urls from the domain www.dextools.io
+        TypeError: The second argument must be an integer
+    """
     
     help_message = "\n\tRead README file in github for more info \n\t(https://github.com/DariHernandez/dextools-clicker)"
         
