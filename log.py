@@ -1,7 +1,6 @@
 import os
 import sys
 import logging
-import globals
 
 # Login file path
 file_log = os.path.join (os.path.dirname (__file__), ".log")
@@ -12,10 +11,6 @@ logging.basicConfig(filename=file_log, level=logging.DEBUG, format=format_log)
 max_lines = 2000
 
 # logging.disable(logging.DEBUG)) 
-
-def update_status (new_status): 
-    globals.status = new_status
-    info(new_status, print_text=True)
 
 def info (text, file="", print_text=False): 
     """

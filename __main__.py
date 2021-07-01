@@ -4,7 +4,6 @@ import log
 import time
 import json
 import config
-import globals
 from scraping_manager.automate import Web_scraping
 
 def click_button (name, scraper, selector, run=True, close_tab=True, inside_selector=""): 
