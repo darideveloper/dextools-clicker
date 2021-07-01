@@ -47,69 +47,74 @@ def main (
         url, loops, twitter_run, reddit_run, telegram_run, trade_run, fav_run, 
         share_twitter_run, share_telegram_run, share_reddit_run): 
     
-    log.info(url)
+    log.info(f"Current page: {url}", print_text=True)
     
+    # Web scraping instance
+    scraper = Web_scraping("about:blank", headless=False)
     
-    # TODO: Update proxy
-    
-    # open URL and wait to load page
-    scraper = Web_scraping(url, headless=False)
-    text = "Loading page..."
-    log.info(text, print_text=True)
-    selector_span = ".ng-trigger.ng-trigger-simpleFadeAnimation.ng-star-inserted"
-    scraper.wait_load(selector_span)
-    scraper.refresh_selenium()
-    
-    # Social, platforms, share an internal selectores
-    selector_twitter = "i.fa.fa-twitter.text-light"
-    selector_reddit = "i.fa.fa-reddit.text-light"
-    selector_telegram = "i.fa.fa-telegram.text-light"
-    selector_trade = "a.btn.btn-salmon.btn-icon-absolute.ng-star-inserted"
-    selector_fav = ".btn.btn-success.btn-icon-absolute.ng-star-inserted"
-    selector_twitter_inside = '.r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64.r-deolkf'
-    selector_twitter_inside += '.r-7cikom.r-1ny4l3l.r-xyw6el.r-641cr4.r-1dz5y72'
-    selector_share = ".fa.fa-share-alt"
-    selector_share_twitter = ".btn-twitter.btn-outline-info"
-    selector_share_telegram = ".btn-telegram.btn-outline-info"
-    selector_share_reddit = ".btn-reddit.btn-outline-salmon"
-    selector_share_twitter_iside = ".r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64"
-    selector_share_twitter_iside += ".r-7cikom.r-1ny4l3l.r-t60dpp.r-1dz5y72"
-    
-    # Open social buttons
-    if twitter_run or reddit_run or telegram_run:
-        click_button("Twitter", scraper, selector_twitter, twitter_run,  
-                    inside_selector=selector_twitter_inside)
-        click_button("Reddit", scraper, selector_reddit, reddit_run)
-        click_button("Telegram", scraper, selector_telegram, telegram_run)
-    
-    # Open platform buttons 
-    if  trade_run or fav_run:
-        click_button("Trade", scraper, selector_trade, trade_run)
-        click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False)
+    for loop_counter in range(loops): 
         
-    # Open share buttons
-    if share_twitter_run or share_telegram_run or share_reddit_run:
-        click_button("Share", scraper, selector_share, close_tab=False)
-        scraper.refresh_selenium()
-        time.sleep(3)
-        click_button("Share twitter", scraper, selector_share_twitter, 
-                     share_twitter_run, inside_selector=selector_share_twitter_iside)
-        click_button("Share telegram", scraper, selector_share_telegram, 
-                     share_telegram)
-        click_button("Share reddit", scraper, selector_share_reddit,
-                     share_reddit)
+        log.info(f"\nLoop {loop_counter+1} of {loops}", print_text=True)
     
-    # Wait time
-    time.sleep(2)
+        # TODO: Update proxy
+        
+        # open URL and wait to load page
+        scraper.set_page(url)
+        log.info("Loading page...", print_text=True)
+        selector_span = ".ng-trigger.ng-trigger-simpleFadeAnimation.ng-star-inserted"
+        scraper.wait_load(selector_span)
+        scraper.refresh_selenium()
+        
+        # Social, platforms, share an internal selectores
+        selector_twitter = "i.fa.fa-twitter.text-light"
+        selector_reddit = "i.fa.fa-reddit.text-light"
+        selector_telegram = "i.fa.fa-telegram.text-light"
+        selector_trade = "a.btn.btn-salmon.btn-icon-absolute.ng-star-inserted"
+        selector_fav = ".btn.btn-success.btn-icon-absolute.ng-star-inserted"
+        selector_twitter_inside = '.r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64.r-deolkf'
+        selector_twitter_inside += '.r-7cikom.r-1ny4l3l.r-xyw6el.r-641cr4.r-1dz5y72'
+        selector_share = ".fa.fa-share-alt"
+        selector_share_twitter = ".btn-twitter.btn-outline-info"
+        selector_share_telegram = ".btn-telegram.btn-outline-info"
+        selector_share_reddit = ".btn-reddit.btn-outline-salmon"
+        selector_share_twitter_iside = ".r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64"
+        selector_share_twitter_iside += ".r-7cikom.r-1ny4l3l.r-t60dpp.r-1dz5y72"
+        
+        # Open social buttons
+        if twitter_run or reddit_run or telegram_run:
+            click_button("Twitter", scraper, selector_twitter, twitter_run,  
+                        inside_selector=selector_twitter_inside)
+            click_button("Reddit", scraper, selector_reddit, reddit_run)
+            click_button("Telegram", scraper, selector_telegram, telegram_run)
+        
+        # Open platform buttons 
+        if  trade_run or fav_run:
+            click_button("Trade", scraper, selector_trade, trade_run)
+            click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False)
             
-    # Close all tabs in browser
+        # Open share buttons
+        if share_twitter_run or share_telegram_run or share_reddit_run:
+            click_button("Share", scraper, selector_share, close_tab=False)
+            scraper.refresh_selenium()
+            time.sleep(3)
+            click_button("Share twitter", scraper, selector_share_twitter, 
+                        share_twitter_run, inside_selector=selector_share_twitter_iside)
+            click_button("Share telegram", scraper, selector_share_telegram, 
+                        share_telegram)
+            click_button("Share reddit", scraper, selector_share_reddit,
+                        share_reddit)
+        
+        # Wait time
+        time.sleep(2)
+                
+    # End selenium
     scraper.end_browser()
     
 
 if __name__ == "__main__":
     
-    help_message = "\n\tRun --help for more info"
-    
+    help_message = "\n\tRead README file in github for more info \n\t(https://github.com/DariHernandez/dextools-clicker)"
+        
     if len(sys.argv) < 4:
         raise AttributeError(f"Very few arguments. {help_message}")
     elif len (sys.argv) > 11: 

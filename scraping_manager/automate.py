@@ -1,4 +1,7 @@
-import os, time, logging, os
+import os
+import sys
+import time
+import logging
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
@@ -43,6 +46,10 @@ class Web_scraping ():
         Open and configure browser
         """
         
+        # Disable logs
+        os.environ['WDM_LOG_LEVEL'] = '0'
+        os.environ['WDM_PRINT_FIRST_LINE'] = 'False'
+        
         # Configure browser
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
@@ -59,10 +66,9 @@ class Web_scraping ():
             
         # Set configuration to  and create instance
         chromedriver = ChromeDriverManager(chrome_type=ChromeType.GOOGLE, 
-                                        log_level='0', 
-                                        print_first_line=False).install()
+                                            log_level='0', 
+                                            print_first_line=False).install()
         self.driver = webdriver.Chrome(chromedriver, options=options, service_log_path=None)
-                
 
         # Clean terminal
         os.system('cls||clear')
