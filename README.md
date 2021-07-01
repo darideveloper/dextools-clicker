@@ -240,7 +240,16 @@ If the program does **not find** a specified **button** to use, the program will
 
 You can **check the history** of which **buttons** were **used** on each page, as well as which **buttons** were **not found**, in the **.log** file
 
-## Config.json
+## Proxy (config.json)
 
-TO DO
+The config.json file contains the proxy settings.
+Its structure is as follows.
 
+``` json
+{
+    "proxy_user":"your user",
+    "proxy_pass": "your password",
+    "proxy_server": "your proxy server or ip",
+    "proxy_port": "your number of port"
+}
+```
