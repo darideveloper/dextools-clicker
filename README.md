@@ -10,20 +10,20 @@ Web automation script, to **click on specific buttons** within the pages of the 
 * **Reddit**
 * **Telegram**
 
-![social buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/social.png)
+![social buttons](https://i.imgur.com/l3p2EMt.png)
 
 ### Platform buttons
 * **Favorite**
 * **Trade**
 
-![Platform buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/platform.png)
+![Platform buttons](https://i.imgur.com/xTfvQBG.png)
 
 ### Share buttons
 * **Share on twitter**
 * **Share on reddit**
 * **Share on telegram**
 
-![Share buttons](https://raw.githubusercontent.com/DariHernandez/dextools-clicker/master/imgs/share.png)
+![Share buttons](https://i.imgur.com/XFKYkbH.png)
 
 
 # Install
@@ -58,7 +58,8 @@ To successfully run the program, the following **arguments must be sent, in orde
 
 |Argument|Description|Type|Example
 |---|---|---|---|
-|**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4f...|
+|**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/|
+|**search_word**|**keyword** to **search** in url page.|String|everape|
 |**loop**|Number of **times** the process **will be repeated on the page**, with different proxies.|Integer|10|
 |**buttons**|One or more arguments, which indicate **which buttons are or aren't pressed** on the page.|String or Boolean|all|
 
@@ -67,7 +68,7 @@ Example:
 ``` bash
 # Run the program 10 times, using all buttons
 # py dextools-clicker url loops buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 10 all
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 all
 ```
 
 ## Buttons
@@ -88,7 +89,7 @@ Example:
 
 ``` bash
 # Run the program 10 times, using all buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 10 all
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 all
 ```
 
 ### Socials
@@ -102,7 +103,7 @@ Example:
 
 ``` bash
 # Run the program 20 times, using only socials buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 20 socials
+$ py dextools-clicker https://www.dextools.io/app/ everape 20 socials
 ```
 
 ### Platform
@@ -115,7 +116,7 @@ Example:
 
 ``` bash
 # Run the program 100 times, using only platform buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 100 platform
+$ py dextools-clicker https://www.dextools.io/app/ everape 100 platform
 ```
 
 ### Share
@@ -129,7 +130,7 @@ Example:
 
 ``` bash
 # Run the program 100 times, using only platform buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 200 platform
+$ py dextools-clicker https://www.dextools.io/app/ everape 200 platform
 ```
 
 ### File
@@ -157,7 +158,7 @@ Example:
 
 ``` bash
 # With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 file
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 file
 ```
 
 ### Custom
@@ -181,27 +182,27 @@ Examples:
 
 ``` bash
 # Run only the Twitter button.
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 true
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 true
 ```
 
 ``` bash
 # Run only the Telegram button.
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true
 ```
 
 ``` bash
 # Run Telegram and Favorite buttons.
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true true
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true true
 ```
 
 ``` bash
 # Run all buttons except twitter and telegram
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false false true true true true true true
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true true true true true true
 ```
 
 ``` bash
 # Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false true false true false true false true
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 false true false true false true false true
 ```
 
 #### True values
@@ -216,7 +217,7 @@ From terminal, **any text other than the following** (ignore case) will be consi
 Example: 
 ``` bash
 # Run all buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 true True a 1 run sample_text "my text" "run this button"
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 true True a 1 run sample_text "my text" "run this button"
 ```
 
 #### False values
@@ -231,7 +232,7 @@ $ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fb
 Example: 
 ``` bash
 # Do not run any buttons
-$ py dextools-clicker https://www.dextools.io/app/uniswap/pair-explorer/0x6bc4fbe8b72512d994fba72ade9de502b3d88ac4 50 false False 0 None null n/a "" ''
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 false False 0 None null n/a "" ''
 ```
 
 ### Not found button
