@@ -2,4 +2,4 @@ __pycache__
 *.json
 temp.*
 .log
-.zip
+*.zip
