@@ -30,7 +30,7 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
             # Close the new tab
             if close_tab: 
                 scraper.switch_to_tab(1)
-                time.sleep(5)
+                time.sleep(7)
                 
                 # Wait to page load with js
                 if inside_selector: 
@@ -42,15 +42,18 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
             text = f"{name} button clicked."
         finally:
             log.info(text, print_text=True)
+        
+        time.sleep (1)
     
 
 def main (
-        url, loops, twitter_run, reddit_run, telegram_run, trade_run, fav_run, 
-        share_twitter_run, share_telegram_run, share_reddit_run): 
+        url, search_word, loops, twitter_run, reddit_run, telegram_run, 
+        trade_run, fav_run, share_twitter_run, share_telegram_run, share_reddit_run): 
     """Run the acction in order for all butons in the page 
 
     Args:
-        url (bool): The url of the page to automate
+        url (str): The url of the page to automate
+        search_word (str): Key for search in main page
         loops (bool): Number of repetitions to do in the page
         twitter_run (bool): Run or not the twitter button
         reddit_run (bool): Run or not the reddit button
@@ -84,15 +87,37 @@ def main (
                            proxy_user=proxy_user, 
                            proxy_pass=proxy_pass)
     
+    # loop for open URL and wait to load the results page
+    while True: 
+        log.info("Loading base page...", print_text=True)
+        selector_search = "ng-autocomplete > div > div.input-container > input"
+        scraper.set_page(url)
+        
+        try: 
+            scraper.wait_load(selector_search, time_out=30)
+        except: 
+            log.info ("The page took too long to load. retrying.", print_text=True)
+        else: 
+            scraper.refresh_selenium()        
+            break
+    
+    # Search specific word and select first element        
+    scraper.send_data(selector_search, search_word)        
+    selector_first_result = "ng-autocomplete > div > div > ul > li:nth-child(2)"        
+    scraper.wait_load (selector_first_result, time_out=20)
+    scraper.click(selector_first_result)
+        
     for loop_counter in range(loops): 
         
         log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True)    
         
-        # loop for open URL and wait to load page
+        # loop for open URL and wait to load the results page
         while True: 
-            scraper.set_page(url)
-            log.info("Loading page...", print_text=True)
+            log.info("Loading specific page...", print_text=True)
             selector_span = ".ng-trigger.ng-trigger-simpleFadeAnimation.ng-star-inserted"
+            
+            if loop_counter > 0: 
+                scraper.reload_forced()
             
             try: 
                 scraper.wait_load(selector_span, time_out=30)
@@ -101,7 +126,8 @@ def main (
             else: 
                 scraper.refresh_selenium()
                 break
-        
+            
+                
         # Social, platforms, share an internal selectores
         selector_twitter = "i.fa.fa-twitter.text-light"
         selector_reddit = "i.fa.fa-reddit.text-light"
@@ -126,12 +152,33 @@ def main (
         
         # Open platform buttons 
         if  trade_run or fav_run:
-            click_button("Trade", scraper, selector_trade, trade_run)
+            
+            # Get trade link
+            trade_link = scraper.get_attrib (selector_trade, "href")
+            
+            if trade_link: 
+                # Normal trade button
+                click_button("Trade", scraper, selector_trade, trade_run)
+            else: 
+                # Catch trade warning
+                selector_trade_warning = "body > ngb-modal-window > div > div > app-scam-modal > div > a"
+                selector_trade_close = "body > ngb-modal-window > div > div > app-scam-modal > div > button"
+                
+                scraper.click(selector_trade)
+                time.sleep(1)
+                scraper.refresh_selenium()
+                
+                click_button("Trade", scraper, selector_trade_warning, trade_run)
+                scraper.refresh_selenium()
+                scraper.click (selector_trade_close)              
+            
+            
             click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False)
             
         # Open share buttons
         if share_twitter_run or share_telegram_run or share_reddit_run:
             click_button("Share", scraper, selector_share, close_tab=False)
+            time.sleep(1)
             scraper.refresh_selenium()
             time.sleep(3)
             click_button("Share twitter", scraper, selector_share_twitter, 
@@ -160,9 +207,9 @@ if __name__ == "__main__":
     
     help_message = "\n\tRead README file in github for more info \n\t(https://github.com/DariHernandez/dextools-clicker)"
         
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 5:
         raise AttributeError(f"Very few arguments. {help_message}")
-    elif len (sys.argv) > 11: 
+    elif len (sys.argv) > 12: 
         raise AttributeError(f"Too many arguments. {help_message}")
     else: 
         
@@ -182,15 +229,18 @@ if __name__ == "__main__":
             raise AttributeError(f"'{url}' is an invalid url")
             sys.exit()
         
+        # Get seach word 
+        search_word = sys.argv[2]
+        
         # Try to get loops
         try:
-            loops = int(sys.argv[2])
+            loops = int(sys.argv[3])
         except: 
             raise TypeError(f"The second argument must be an integer.{help_message}")
             sys.exit()
         
         # Get third argument
-        third_argv = str(sys.argv[3]).lower()
+        third_argv = str(sys.argv[4]).lower()
         if third_argv == "all": 
             
             # Run all options
@@ -243,7 +293,7 @@ if __name__ == "__main__":
             
             # Convert all other arguments to boolean
             specific_buttons = []
-            for argv in sys.argv[3:]:
+            for argv in sys.argv[4:]:
                 
                 # Convert to title string
                 argv_str = str(argv).title()
@@ -273,5 +323,5 @@ if __name__ == "__main__":
             
         
         # call main function
-        scraper = main(url, loops, twitter, reddit, telegram, trade, fav, 
+        scraper = main(url, search_word, loops, twitter, reddit, telegram, trade, fav, 
                        share_twitter, share_telegram, share_reddit)

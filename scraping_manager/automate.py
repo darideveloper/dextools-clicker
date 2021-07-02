@@ -168,7 +168,7 @@ class Web_scraping ():
         Take a sreenshot of the current browser window
         """ 
 
-        self.driver.save_screenshot("{}.png".format(base_name))
+        self.driver.save_screenshot(f"{base_name}.png")
              
     def get_browser (self): 
         """
@@ -194,7 +194,13 @@ class Web_scraping ():
         self.end_browser()
         self.driver = self.get_browser()
         self.driver.get (self.__web_page)
-
+    
+    def reload_forced (self):
+        """ Force the reload of the page with Alt + Shiff + R
+        """
+        
+        self.driver.execute_script("location.reload(true);")
+        self.driver.execute_script("window.history.forward(1);")
     
     def send_data (self, selector, data): 
         """
@@ -501,13 +507,6 @@ class Web_scraping ():
         self.close_tab()
         self.switch_to_tab(0)     
         time.sleep(self.basetime * time_units)   
-        
-    def screenshot (self, file_basename): 
-        """
-        Take a screenshot of the current screen
-        """
-        
-        self.driver.save_screenshot(file_basename + ".png")
     
     def save_page(self, file_html): 
         """ Save current page in local file"""
