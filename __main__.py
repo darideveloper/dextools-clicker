@@ -6,7 +6,9 @@ import json
 import config
 from scraping_manager.automate import Web_scraping
 
-def click_button (name, scraper, selector, run=True, close_tab=True, inside_selector=""): 
+def click_button (
+        name, scraper, selector, run=True, close_tab=True, 
+        inside_selector="", wait_time=1): 
     """Click in specific button in the page with css selector
 
     Args:
@@ -21,7 +23,6 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
     if run:
         # Try to click in button
         try:
-            # Open link / click in button
             scraper.click(selector)
         except: 
             text = f"{name} button not found."
@@ -30,9 +31,11 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
             # Close the new tab
             if close_tab: 
                 scraper.switch_to_tab(1)
-                time.sleep(7)
                 
-                # Wait to page load with js
+                # if wait_time:
+                time.sleep(wait_time)
+                
+                # Wait to page load
                 if inside_selector: 
                     scraper.wait_load(inside_selector)
                 
@@ -48,7 +51,8 @@ def click_button (name, scraper, selector, run=True, close_tab=True, inside_sele
 
 def main (
         url, search_word, loops, twitter_run, reddit_run, telegram_run, 
-        trade_run, fav_run, share_twitter_run, share_telegram_run, share_reddit_run): 
+        trade_run, fav_run, share_twitter_run, share_telegram_run, 
+        share_reddit_run, wait_time=1): 
     """Run the acction in order for all butons in the page 
 
     Args:
@@ -73,6 +77,7 @@ def main (
     with open (config_path) as file: 
         data = json.loads(file.read())
     
+    # Get proxy
     proxy_server = data["proxy_server"]
     proxy_port = data["proxy_port"]
     proxy_user = data["proxy_user"]
@@ -90,7 +95,7 @@ def main (
                             proxy_user=proxy_user, 
                             proxy_pass=proxy_pass)
         
-        log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True)  
+        log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True) 
         
         # loop for open URL and wait to load the results page
         while True: 
@@ -147,9 +152,9 @@ def main (
         # Open social buttons
         if twitter_run or reddit_run or telegram_run:
             click_button("Twitter", scraper, selector_twitter, twitter_run,  
-                        inside_selector=selector_twitter_inside)
-            click_button("Reddit", scraper, selector_reddit, reddit_run)
-            click_button("Telegram", scraper, selector_telegram, telegram_run)
+                        inside_selector=selector_twitter_inside, wait_time=wait_time)
+            click_button("Reddit", scraper, selector_reddit, reddit_run, wait_time=wait_time)
+            click_button("Telegram", scraper, selector_telegram, telegram_run, wait_time=wait_time)
         
         # Open platform buttons 
         if  trade_run or fav_run:
@@ -159,7 +164,7 @@ def main (
             
             if trade_link: 
                 # Normal trade button
-                click_button("Trade", scraper, selector_trade, trade_run)
+                click_button("Trade", scraper, selector_trade, trade_run, wait_time=wait_time)
             else: 
                 # Catch trade warning
                 selector_trade_warning = "body > ngb-modal-window > div > div > app-scam-modal > div > a"
@@ -169,25 +174,26 @@ def main (
                 time.sleep(1)
                 scraper.refresh_selenium()
                 
-                click_button("Trade", scraper, selector_trade_warning, trade_run)
+                click_button("Trade", scraper, selector_trade_warning, trade_run, wait_time=wait_time)
                 scraper.refresh_selenium()
                 scraper.click (selector_trade_close)              
             
             
-            click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False)
+            click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False, wait_time=wait_time)
             
         # Open share buttons
         if share_twitter_run or share_telegram_run or share_reddit_run:
-            click_button("Share", scraper, selector_share, close_tab=False)
-            time.sleep(1)
+            scraper.click(selector_share)
+            time.sleep(2)
             scraper.refresh_selenium()
-            time.sleep(3)
+            time.sleep(2)
             click_button("Share twitter", scraper, selector_share_twitter, 
-                        share_twitter_run, inside_selector=selector_share_twitter_iside)
+                        share_twitter_run, inside_selector=selector_share_twitter_iside, 
+                        wait_time=wait_time)
             click_button("Share telegram", scraper, selector_share_telegram, 
-                        share_telegram)
+                        share_telegram, wait_time=wait_time)
             click_button("Share reddit", scraper, selector_share_reddit,
-                        share_reddit)
+                        share_reddit, wait_time=wait_time)
         
         # Wait time
         time.sleep(2)
@@ -208,9 +214,9 @@ if __name__ == "__main__":
     
     help_message = "\n\tRead README file in github for more info \n\t(https://github.com/DariHernandez/dextools-clicker)"
         
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 6:
         raise AttributeError(f"Very few arguments. {help_message}")
-    elif len (sys.argv) > 12: 
+    elif len (sys.argv) > 13: 
         raise AttributeError(f"Too many arguments. {help_message}")
     else: 
         
@@ -240,8 +246,15 @@ if __name__ == "__main__":
             raise TypeError(f"The second argument must be an integer.{help_message}")
             sys.exit()
         
+        # Try to get loops
+        try:
+            wait_time = int(sys.argv[4])
+        except: 
+            raise TypeError(f"The second argument must be an integer.{help_message}")
+            sys.exit()
+        
         # Get third argument
-        third_argv = str(sys.argv[4]).lower()
+        third_argv = str(sys.argv[5]).lower()
         if third_argv == "all": 
             
             # Run all options
@@ -294,7 +307,7 @@ if __name__ == "__main__":
             
             # Convert all other arguments to boolean
             specific_buttons = []
-            for argv in sys.argv[4:]:
+            for argv in sys.argv[5:]:
                 
                 # Convert to title string
                 argv_str = str(argv).title()
@@ -325,4 +338,4 @@ if __name__ == "__main__":
         
         # call main function
         scraper = main(url, search_word, loops, twitter, reddit, telegram, trade, fav, 
-                       share_twitter, share_telegram, share_reddit)
+                       share_twitter, share_telegram, share_reddit, wait_time)

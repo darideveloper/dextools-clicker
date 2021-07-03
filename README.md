@@ -52,7 +52,7 @@ $ py dextools-clicker
 $ py dextools clicker\__main__.py
 ```
 
-# Setting
+# Settings
 
 To successfully run the program, the following **arguments must be sent, in order**, from the terminal. 
 
@@ -61,14 +61,15 @@ To successfully run the program, the following **arguments must be sent, in orde
 |**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/|
 |**search_word**|**keyword** to **search** in url page.|String|everape|
 |**loop**|Number of **times** the process **will be repeated on the page**, with different proxies.|Integer|10|
+|**wait_time**|**Seconds** to **wait** to load the **pages** opened in new tab.|Integer|30|
 |**buttons**|One or more arguments, which indicate **which buttons are or aren't pressed** on the page.|String or Boolean|all|
 
 Example: 
 
 ``` bash
-# Run the program 10 times, using all buttons
+# Run the program 10 times, using all buttons and wait 30 seconds per page
 # py dextools-clicker url loops buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 10 all
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all
 ```
 
 ## Buttons
@@ -88,8 +89,8 @@ With the keyword **"all"** (ignore uppercase and lowercase), the actions of **al
 Example: 
 
 ``` bash
-# Run the program 10 times, using all buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 10 all
+# Run the program 10 times, using all buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all
 ```
 
 ### Socials
@@ -102,8 +103,8 @@ With the keyword **"social"** (ignore uppercase and lowercase), the actions of t
 Example: 
 
 ``` bash
-# Run the program 20 times, using only socials buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 20 socials
+# Run the program 20 times, using only socials buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 20 30 socials
 ```
 
 ### Platform
@@ -115,8 +116,8 @@ With the keyword **"platform"** (ignore uppercase and lowercase), the actions of
 Example: 
 
 ``` bash
-# Run the program 100 times, using only platform buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 100 platform
+# Run the program 100 times, using only platform buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 100 30 platform
 ```
 
 ### Share
@@ -129,8 +130,8 @@ With the keyword **"share"** (ignore uppercase and lowercase), the actions of on
 Example: 
 
 ``` bash
-# Run the program 100 times, using only platform buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 200 platform
+# Run the program 100 times, using only platform buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 200 30 platform
 ```
 
 ### File
@@ -157,8 +158,8 @@ Note: in the buttons.json file (unlike the "custom" section), **only true or fal
 Example: 
 
 ``` bash
-# With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 file
+# With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram; and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 file
 ```
 
 ### Custom
@@ -181,28 +182,28 @@ If **less than 8** True and False **values** are specified, **all missing values
 Examples: 
 
 ``` bash
-# Run only the Twitter button.
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 true
+# Run only the Twitter button and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true
 ```
 
 ``` bash
-# Run only the Telegram button.
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true
+# Run only the Telegram button and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true
 ```
 
 ``` bash
-# Run Telegram and Favorite buttons.
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true true
+# Run Telegram and Favorite buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true
 ```
 
 ``` bash
-# Run all buttons except twitter and telegram
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 false false true true true true true true
+# Run all buttons except twitter and telegram; and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true true true true true
 ```
 
 ``` bash
-# Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 false true false true false true false true
+# Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false true false true false true false true
 ```
 
 #### True values
@@ -217,7 +218,7 @@ From terminal, **any text other than the following** (ignore case) will be consi
 Example: 
 ``` bash
 # Run all buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 true True a 1 run sample_text "my text" "run this button"
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true True a 1 run sample_text "my text" "run this button"
 ```
 
 #### False values
@@ -232,7 +233,7 @@ $ py dextools-clicker https://www.dextools.io/app/ everape 50 true True a 1 run 
 Example: 
 ``` bash
 # Do not run any buttons
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 false False 0 None null n/a "" ''
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false False 0 None null n/a "" ''
 ```
 
 ### Not found button

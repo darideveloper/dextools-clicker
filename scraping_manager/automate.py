@@ -80,7 +80,7 @@ class Web_scraping ():
             options.add_argument(f"--proxy-server={proxy}")
         
         # Set proxy with autentification 
-        if (self.__proxy_server and self.__proxy_port 
+        if (not self.__headless and self.__proxy_server and self.__proxy_port 
             and self.__proxy_user and self.__proxy_pass):
             
             self.__create_proxy_extesion()
@@ -362,9 +362,7 @@ class Web_scraping ():
             script = f'window.open("{web_page}");'
         else: 
             script = f'window.open("{web_page}").focus();'
-        
-        print (script)
-        
+                
         self.driver.execute_script(script)
     
     def set_page (self, web_page, time_out=0, break_time_out=False):
