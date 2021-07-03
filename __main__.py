@@ -65,9 +65,10 @@ def main (
         share_reddit_run (bool): Run or not the reddit share button
     """
     
-    log.info(f"Current page: {url}", print_text=True)
     
-    # Get proxy
+    log.info(f"Current page: {url}", print_text=True)
+        
+    # Get crdentials
     config_path = os.path.join (os.path.dirname(__file__), "config.json")
     with open (config_path) as file: 
         data = json.loads(file.read())
@@ -79,37 +80,37 @@ def main (
     proxy = f"https://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
     log.info (f"Proxy: {proxy}", print_text=True)
     
-    # Web scraping instance with proxy
-    scraper = Web_scraping("about:blank", 
-                           headless=False,  
-                           proxy_server=proxy_server,
-                           proxy_port=proxy_port, 
-                           proxy_user=proxy_user, 
-                           proxy_pass=proxy_pass)
-    
-    # loop for open URL and wait to load the results page
-    while True: 
-        log.info("Loading base page...", print_text=True)
-        selector_search = "ng-autocomplete > div > div.input-container > input"
-        scraper.set_page(url)
-        
-        try: 
-            scraper.wait_load(selector_search, time_out=30)
-        except: 
-            log.info ("The page took too long to load. retrying.", print_text=True)
-        else: 
-            scraper.refresh_selenium()        
-            break
-    
-    # Search specific word and select first element        
-    scraper.send_data(selector_search, search_word)        
-    selector_first_result = "ng-autocomplete > div > div > ul > li:nth-child(2)"        
-    scraper.wait_load (selector_first_result, time_out=20)
-    scraper.click(selector_first_result)
-        
     for loop_counter in range(loops): 
         
-        log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True)    
+        # Web scraping instance with proxy
+        scraper = Web_scraping("about:blank", 
+                            headless=False,  
+                            proxy_server=proxy_server,
+                            proxy_port=proxy_port, 
+                            proxy_user=proxy_user, 
+                            proxy_pass=proxy_pass)
+        
+        log.info(f"\tLoop {loop_counter+1} of {loops}", print_text=True)  
+        
+        # loop for open URL and wait to load the results page
+        while True: 
+            log.info("Loading base page...", print_text=True)
+            selector_search = "ng-autocomplete > div > div.input-container > input"
+            scraper.set_page(url)
+            
+            try: 
+                scraper.wait_load(selector_search, time_out=30)
+            except: 
+                log.info ("The page took too long to load. retrying.", print_text=True)
+            else: 
+                scraper.refresh_selenium()        
+                break
+        
+        # Search specific word and select first element        
+        scraper.send_data(selector_search, search_word)        
+        selector_first_result = "ng-autocomplete > div > div > ul > li:nth-child(2)"        
+        scraper.wait_load (selector_first_result, time_out=20)
+        scraper.click(selector_first_result)  
         
         # loop for open URL and wait to load the results page
         while True: 
@@ -191,8 +192,8 @@ def main (
         # Wait time
         time.sleep(2)
                 
-    # End selenium
-    scraper.end_browser()
+        # End selenium
+        scraper.end_browser()
     
 
 if __name__ == "__main__":
