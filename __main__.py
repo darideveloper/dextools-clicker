@@ -19,6 +19,7 @@ def click_button (
         run (bool): Run or not the acction in the current button
         close_tab (bool, optional): Close the current tab after click. Defaults to True.
         inside_selector(str): CSS selector inside the new tab, for wait to load the new page
+        wait_time (int): Seconds to wait before close browser
     """
     
     if run:
@@ -68,6 +69,7 @@ def main (
         share_twitter_run (bool): Run or not the twitter share button
         share_telegram_run (bool): Run or not the telegram share button
         share_reddit_run (bool): Run or not the reddit share button
+        wait_time (int): Seconds to wait before close browser
     """
     
     
