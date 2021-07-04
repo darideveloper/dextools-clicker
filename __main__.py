@@ -2,6 +2,7 @@ import os
 import sys
 import log
 import time
+import random
 import json
 import config
 from scraping_manager.automate import Web_scraping
@@ -77,12 +78,13 @@ def main (
     with open (config_path) as file: 
         data = json.loads(file.read())
     
-    # Get proxy
+    # Get proxy and user preferences
     proxy_server = data["proxy_server"]
     proxy_port = data["proxy_port"]
     proxy_user = data["proxy_user"]
     proxy_pass = data["proxy_pass"]
     proxy = f"https://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
+    max_end_page = int (data["max_end_page"])
     log.info (f"Proxy: {proxy}", print_text=True)
     
     for loop_counter in range(loops): 
@@ -198,6 +200,11 @@ def main (
         # Wait time
         time.sleep(2)
                 
+        # Wait random time before end browser loop
+        wait_seconds = random.randint(1,max_end_page)
+        print (f"Waiting {wait_seconds}s for close browser...")
+        time.sleep (wait_seconds)
+        
         # End selenium
         scraper.end_browser()
     
