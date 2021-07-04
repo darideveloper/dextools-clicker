@@ -45,8 +45,8 @@ def click_button (
                 scraper.switch_to_tab(0)
                 
             text = f"{name} button clicked."
-        finally:
-            log.info(text, print_text=True)
+        
+        log.info(text, print_text=True)
         
         time.sleep (1)
     
@@ -179,56 +179,99 @@ def main (
         selector_share_reddit = ".btn-reddit.btn-outline-salmon"
         selector_share_twitter_iside = ".r-30o5oe.r-1niwhzg.r-17gur6a.r-1yadl64"
         selector_share_twitter_iside += ".r-7cikom.r-1ny4l3l.r-t60dpp.r-1dz5y72"
+        selector_share_close = ".modal-footer.d-flex.justify-content-center .btn.btn-info"
         
-        # Open social buttons
-        if twitter_run or reddit_run or telegram_run:
-            click_button("Twitter", scraper, selector_twitter, twitter_run,  
-                        inside_selector=selector_twitter_inside, wait_time=wait_time)
-            click_button("Reddit", scraper, selector_reddit, reddit_run, wait_time=wait_time)
-            click_button("Telegram", scraper, selector_telegram, telegram_run, wait_time=wait_time)
+        # Add active buttons to list
+        buttons_to_click = []
+        if twitter_run:
+            buttons_to_click.append("twitter")
+        if reddit_run:
+            buttons_to_click.append("reddit")
+        if telegram_run:
+            buttons_to_click.append("telegram")
+        if trade_run: 
+            buttons_to_click.append("trade")
+        if fav_run:
+            buttons_to_click.append("fav")
+        if share_twitter_run: 
+            buttons_to_click.append("share_twitter")
+        if share_telegram_run: 
+            buttons_to_click.append("share_telegram")
+        if share_reddit_run:
+            buttons_to_click.append("share_reddit")
         
-        # Open platform buttons 
-        if  trade_run or fav_run:
+        # Click in buttons random
+        while buttons_to_click:
             
-            # Get trade link
-            trade_link = scraper.get_attrib (selector_trade, "href")
+            # Get next random button
+            current_button = random.choice(buttons_to_click)
+            index_button = buttons_to_click.index(current_button)
             
-            if trade_link: 
-                # Normal trade button
-                click_button("Trade", scraper, selector_trade, trade_run, wait_time=wait_time)
-            else: 
-                # Catch trade warning
-                selector_trade_warning = "body > ngb-modal-window > div > div > app-scam-modal > div > a"
-                selector_trade_close = "body > ngb-modal-window > div > div > app-scam-modal > div > button"
+            # Open social buttons
+            if current_button == "twitter":
+                click_button("Twitter", scraper, selector_twitter, twitter_run,  
+                            inside_selector=selector_twitter_inside, wait_time=wait_time)
                 
-                scraper.click(selector_trade)
-                time.sleep(1)
+            if current_button == "reddit":
+                click_button("Reddit", scraper, selector_reddit, reddit_run, wait_time=wait_time)
+                
+            if current_button == "telegram":
+                click_button("Telegram", scraper, selector_telegram, telegram_run, wait_time=wait_time)
+            
+            # Open platform buttons 
+            if current_button == "trade":
+                
+                # Get trade link
+                trade_link = scraper.get_attrib (selector_trade, "href")
+                
+                if trade_link: 
+                    # Normal trade button
+                    click_button("Trade", scraper, selector_trade, trade_run, wait_time=wait_time)
+                else: 
+                    # Catch trade warning
+                    selector_trade_warning = "body > ngb-modal-window > div > div > app-scam-modal > div > a"
+                    selector_trade_close = "body > ngb-modal-window > div > div > app-scam-modal > div > button"
+                    
+                    scraper.click(selector_trade)
+                    time.sleep(1)
+                    scraper.refresh_selenium()
+                    
+                    click_button("Trade", scraper, selector_trade_warning, trade_run, wait_time=wait_time)
+                    scraper.refresh_selenium()
+                    scraper.click (selector_trade_close)              
+                
+            if current_button == "fav":
+                click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False, wait_time=wait_time)
+                
+            # Open share buttons
+            if str(current_button).startswith("share"):
+                scraper.click(selector_share)
+                time.sleep(2)
                 scraper.refresh_selenium()
+                time.sleep(2)
                 
-                click_button("Trade", scraper, selector_trade_warning, trade_run, wait_time=wait_time)
+                if current_button == "share_twitter":
+                    click_button("Share twitter", scraper, selector_share_twitter, 
+                                share_twitter_run, inside_selector=selector_share_twitter_iside, 
+                                wait_time=wait_time)
+                
+                if current_button == "share_telegram":
+                    click_button("Share telegram", scraper, selector_share_telegram, 
+                                share_telegram, wait_time=wait_time)
+                
+                if current_button == "share_reddit":
+                    click_button("Share reddit", scraper, selector_share_reddit,
+                                share_reddit, wait_time=wait_time)
+                    
+                scraper.click(selector_share_close)
                 scraper.refresh_selenium()
-                scraper.click (selector_trade_close)              
-            
-            
-            click_button("Favorite", scraper, selector_fav, fav_run, close_tab=False, wait_time=wait_time)
-            
-        # Open share buttons
-        if share_twitter_run or share_telegram_run or share_reddit_run:
-            scraper.click(selector_share)
-            time.sleep(2)
-            scraper.refresh_selenium()
-            time.sleep(2)
-            click_button("Share twitter", scraper, selector_share_twitter, 
-                        share_twitter_run, inside_selector=selector_share_twitter_iside, 
-                        wait_time=wait_time)
-            click_button("Share telegram", scraper, selector_share_telegram, 
-                        share_telegram, wait_time=wait_time)
-            click_button("Share reddit", scraper, selector_share_reddit,
-                        share_reddit, wait_time=wait_time)
         
-        # Wait time
-        time.sleep(2)
+            # Wait time
+            time.sleep(2)
                 
+            # Delete last button from list
+            del buttons_to_click[index_button]
+            
         # Wait random time before end browser loop
         wait_seconds = random.randint(1,max_end_page)
         print (f"Waiting {wait_seconds}s for close browser...")
