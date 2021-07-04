@@ -85,6 +85,7 @@ def main (
     proxy_pass = data["proxy_pass"]
     proxy = f"https://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
     max_end_page = int (data["max_end_page"])
+    random_links = int (data["random_links"])
     log.info (f"Proxy: {proxy}", print_text=True)
     
     for loop_counter in range(loops): 
@@ -112,6 +113,32 @@ def main (
             else: 
                 scraper.refresh_selenium()        
                 break
+        
+        # Loop por each random link to click
+        for index in range (random_links):
+            
+            while True:
+                try:
+                    # Get links / buttons
+                    selector_link = 'a[target="_blank"]'
+                    links = scraper.get_elems(selector_link)
+                    
+                    # Click button
+                    random_link = random.choice(links)
+                    random_link.click() 
+                except: 
+                    continue
+                else:
+                    break
+            
+            # Go back (close new tab or return to page in browser)
+            print (f"Openning random link {index+1}...")
+            scraper.switch_to_tab(1)                
+            time.sleep(5)
+            scraper.close_tab()
+            scraper.switch_to_tab(0)
+            time.sleep(2)
+        browser = scraper.get_browser().refresh()
         
         # Search specific word and select first element        
         scraper.send_data(selector_search, search_word)        

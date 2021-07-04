@@ -253,6 +253,7 @@ Its structure is as follows.
     "proxy_pass": "your password",
     "proxy_server": "your proxy server or ip",
     "proxy_port": "your number of port", 
-    "max_end_page": "max seconds to wait before close browser"
+    "max_end_page": "max seconds to wait before close browser",
+    "random_links": "random links / buttons to click before search keywords"
 }
 ```
