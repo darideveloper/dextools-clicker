@@ -41,257 +41,257 @@ Project type: **client's project**
 
 # Details
 
-### Social buttons\r
-* **Twitter**\r
-* **Reddit**\r
-* **Telegram**\r
-\r
-![social buttons](https://i.imgur.com/l3p2EMt.png)\r
-\r
-### Platform buttons\r
-* **Favorite**\r
-* **Trade**\r
-\r
-![Platform buttons](https://i.imgur.com/xTfvQBG.png)\r
-\r
-### Share buttons\r
-* **Share on twitter**\r
-* **Share on reddit**\r
-* **Share on telegram**\r
-\r
+### Social buttons
+* **Twitter**
+* **Reddit**
+* **Telegram**
+
+![social buttons](https://i.imgur.com/l3p2EMt.png)
+
+### Platform buttons
+* **Favorite**
+* **Trade**
+
+![Platform buttons](https://i.imgur.com/xTfvQBG.png)
+
+### Share buttons
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
+
 ![Share buttons](https://i.imgur.com/XFKYkbH.png)
 
 # Install
 
-## Third party modules\r
-\r
-Install all modules from pip: \r
-\r
-\\`\\`\\` bash\r
-$ pip install -r requirements.txt\r
-\\`\\`\\`\r
-\r
-## Programs\r
-\r
-To run the project, the following programs must be installed:\r
-\r
+## Third party modules
+
+Install all modules from pip: 
+
+``` bash
+$ pip install -r requirements.txt
+```
+
+## Programs
+
+To run the project, the following programs must be installed:
+
 * [Google Chrome](https://www.google.com/intl/es/chrome) last version
 
 # Settings
 
-To successfully run the program, the following **arguments must be sent, in order**, from the terminal. \r
-\r
-|Argument|Description|Type|Example\r
-|---|---|---|---|\r
-|**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/|\r
-|**search_word**|**keyword** to **search** in url page.|String|everape|\r
-|**loop**|Number of **times** the process **will be repeated on the page**, with different proxies.|Integer|10|\r
-|**wait_time**|**Seconds** to **wait** to load the **pages** opened in new tab.|Integer|30|\r
-|**buttons**|One or more arguments, which indicate **which buttons are or aren't pressed** on the page.|String or Boolean|all|\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# Run the program 10 times, using all buttons and wait 30 seconds per page\r
-# py dextools-clicker url loops buttons\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all\r
-\\`\\`\\`\r
-\r
-## Buttons\r
-\r
-### All\r
-\r
-With the keyword **\\\"all\\\"** (ignore uppercase and lowercase), the actions of **all buttons** will be performed:\r
-* **Twitter**\r
-* **Reddit**\r
-* **Telegram**\r
-* **Favorite**\r
-* **Trade**\r
-* **Share on twitter**\r
-* **Share on reddit**\r
-* **Share on telegram**\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# Run the program 10 times, using all buttons and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all\r
-\\`\\`\\`\r
-\r
-### Socials\r
-\r
-With the keyword **\\\"social\\\"** (ignore uppercase and lowercase), the actions of the **social buttons** will only be performed:\r
-* **Twitter**\r
-* **Reddit**\r
-* **Telegram**\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# Run the program 20 times, using only socials buttons and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 20 30 socials\r
-\\`\\`\\`\r
-\r
-### Platform\r
-\r
-With the keyword **\\\"platform\\\"** (ignore uppercase and lowercase), the actions of only the **platform's** unique **buttons** will be performed:\r
-* **Favorite**\r
-* **Trade**\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# Run the program 100 times, using only platform buttons and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 100 30 platform\r
-\\`\\`\\`\r
-\r
-### Share\r
-\r
-With the keyword **\\\"share\\\"** (ignore uppercase and lowercase), the actions of only the **share buttons** will be performed:\r
-* **Share on twitter**\r
-* **Share on reddit**\r
-* **Share on telegram**\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# Run the program 100 times, using only platform buttons and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 200 30 platform\r
-\\`\\`\\`\r
-\r
-### File\r
-\r
-With the keyword **\\\"file\\\"** (ignore uppercase and lowercase), the **actions specified in the buttons.json** file will be performed.\r
-You can edit the document with any text or code editor.\r
-\r
-buttons.json file\r
-\\`\\`\\` bash\r
-{\r
-    \\\"twitter\\\": true, \r
-    \\\"reddit\\\": false,\r
-    \\\"telegram\\\": true,\r
-    \\\"trade\\\": true,\r
-    \\\"fav\\\": false,\r
-    \\\"share_twitter\\\": false, \r
-    \\\"share_telegram\\\": true,\r
-    \\\"share_reddit\\\": false\r
-}\r
-\\`\\`\\`\r
-\r
-Note: in the buttons.json file (unlike the \\\"custom\\\" section), **only true or false values are valid** (upper and lower case does matter).\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-# With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram; and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 file\r
-\\`\\`\\`\r
-\r
-### Custom\r
-\r
-You can **specify** which **buttons to execute exactly**, from the **terminal**.\r
-\r
-**After** the variable **\\\"loop\\\"**, **each** of the following **values** will **represent** whether or not to execute a **specific button**, considering the following **order**:\r
-\r
-1. **Twitter**\r
-2. **Reddit**\r
-3. **Telegram**\r
-4. **Favorite**\r
-5. **Trade**\r
-6. **Share on twitter**\r
-7. **Share on reddit**\r
-8. **Share on telegram**\r
-\r
-If **less than 8** True and False **values** are specified, **all missing values** will be considered **False**.\r
-\r
-Examples: \r
-\r
-\\`\\`\\` bash\r
-# Run only the Twitter button and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true\r
-\\`\\`\\`\r
-\r
-\\`\\`\\` bash\r
-# Run only the Telegram button and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true\r
-\\`\\`\\`\r
-\r
-\\`\\`\\` bash\r
-# Run Telegram and Favorite buttons and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true\r
-\\`\\`\\`\r
-\r
-\\`\\`\\` bash\r
-# Run all buttons except twitter and telegram; and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true true true true true\r
-\\`\\`\\`\r
-\r
-\\`\\`\\` bash\r
-# Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram and wait 30 seconds per page\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false true false true false true false true\r
-\\`\\`\\`\r
-\r
-#### True values\r
-From terminal, **any text other than the following** (ignore case) will be considered as **true**:\r
-* **False**\r
-* **0** (zero),\r
-* **None**\r
-* **Null**\r
-* **N/A**\r
-* Empty String ( **\\\"\\\"** or **''** )\r
-\r
-Example: \r
-\\`\\`\\` bash\r
-# Run all buttons\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true True a 1 run sample_text \\\"my text\\\" \\\"run this button\\\"\r
-\\`\\`\\`\r
-\r
-#### False values\r
-**Only the following values** will be considered as **false** (ignore case):\r
-* **False**\r
-* **0** (zero),\r
-* **None**\r
-* **Null**\r
-* **N/A**\r
-* Empty String ( **\\\"\\\"** or **''** )\r
-\r
-Example: \r
-\\`\\`\\` bash\r
-# Do not run any buttons\r
-$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false False 0 None null n/a \\\"\\\" ''\r
-\\`\\`\\`\r
-\r
-### Not found button\r
-\r
-If the program does **not find** a specified **button** to use, the program will **not stop**.\r
-\r
-You can **check the history** of which **buttons** were **used** on each page, as well as which **buttons** were **not found**, in the **.log** file\r
-\r
-## config.json\r
-\r
-The config.json file contains the proxy settings.\r
-Its structure is as follows.\r
-\r
-\\`\\`\\` json\r
-{\r
-    \\\"proxy_user\\\":\\\"your user\\\",\r
-    \\\"proxy_pass\\\": \\\"your password\\\",\r
-    \\\"proxy_server\\\": \\\"your proxy server or ip\\\",\r
-    \\\"proxy_port\\\": \\\"your number of port\\\", \r
-    \\\"max_end_page\\\": \\\"max seconds to wait before close browser\\\",\r
-    \\\"random_links\\\": \\\"random links / buttons to click before search keywords\\\"\r
-}\r
-\\`\\`\\`
+To successfully run the program, the following **arguments must be sent, in order**, from the terminal. 
+
+|Argument|Description|Type|Example
+|---|---|---|---|
+|**url**|**Page** of www.dextools.io **to automate**.|String|https://www.dextools.io/app/|
+|**search_word**|**keyword** to **search** in url page.|String|everape|
+|**loop**|Number of **times** the process **will be repeated on the page**, with different proxies.|Integer|10|
+|**wait_time**|**Seconds** to **wait** to load the **pages** opened in new tab.|Integer|30|
+|**buttons**|One or more arguments, which indicate **which buttons are or aren't pressed** on the page.|String or Boolean|all|
+
+Example: 
+
+``` bash
+# Run the program 10 times, using all buttons and wait 30 seconds per page
+# py dextools-clicker url loops buttons
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all
+```
+
+## Buttons
+
+### All
+
+With the keyword **"all"** (ignore uppercase and lowercase), the actions of **all buttons** will be performed:
+* **Twitter**
+* **Reddit**
+* **Telegram**
+* **Favorite**
+* **Trade**
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
+
+Example: 
+
+``` bash
+# Run the program 10 times, using all buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 10 30 all
+```
+
+### Socials
+
+With the keyword **"social"** (ignore uppercase and lowercase), the actions of the **social buttons** will only be performed:
+* **Twitter**
+* **Reddit**
+* **Telegram**
+
+Example: 
+
+``` bash
+# Run the program 20 times, using only socials buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 20 30 socials
+```
+
+### Platform
+
+With the keyword **"platform"** (ignore uppercase and lowercase), the actions of only the **platform's** unique **buttons** will be performed:
+* **Favorite**
+* **Trade**
+
+Example: 
+
+``` bash
+# Run the program 100 times, using only platform buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 100 30 platform
+```
+
+### Share
+
+With the keyword **"share"** (ignore uppercase and lowercase), the actions of only the **share buttons** will be performed:
+* **Share on twitter**
+* **Share on reddit**
+* **Share on telegram**
+
+Example: 
+
+``` bash
+# Run the program 100 times, using only platform buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 200 30 platform
+```
+
+### File
+
+With the keyword **"file"** (ignore uppercase and lowercase), the **actions specified in the buttons.json** file will be performed.
+You can edit the document with any text or code editor.
+
+buttons.json file
+``` bash
+{
+    "twitter": true, 
+    "reddit": false,
+    "telegram": true,
+    "trade": true,
+    "fav": false,
+    "share_twitter": false, 
+    "share_telegram": true,
+    "share_reddit": false
+}
+```
+
+Note: in the buttons.json file (unlike the "custom" section), **only true or false values are valid** (upper and lower case does matter).
+
+Example: 
+
+``` bash
+# With the buttons.json document from the previous example, the buttons will be executed specifically: twitter, telegram, trade and share_telegram; and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 file
+```
+
+### Custom
+
+You can **specify** which **buttons to execute exactly**, from the **terminal**.
+
+**After** the variable **"loop"**, **each** of the following **values** will **represent** whether or not to execute a **specific button**, considering the following **order**:
+
+1. **Twitter**
+2. **Reddit**
+3. **Telegram**
+4. **Favorite**
+5. **Trade**
+6. **Share on twitter**
+7. **Share on reddit**
+8. **Share on telegram**
+
+If **less than 8** True and False **values** are specified, **all missing values** will be considered **False**.
+
+Examples: 
+
+``` bash
+# Run only the Twitter button and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true
+```
+
+``` bash
+# Run only the Telegram button and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true
+```
+
+``` bash
+# Run Telegram and Favorite buttons and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true
+```
+
+``` bash
+# Run all buttons except twitter and telegram; and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false false true true true true true true
+```
+
+``` bash
+# Run the buttons: Reddit, Favorite, Share on twitter, Share on telegram and wait 30 seconds per page
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false true false true false true false true
+```
+
+#### True values
+From terminal, **any text other than the following** (ignore case) will be considered as **true**:
+* **False**
+* **0** (zero),
+* **None**
+* **Null**
+* **N/A**
+* Empty String ( **""** or **''** )
+
+Example: 
+``` bash
+# Run all buttons
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 true True a 1 run sample_text "my text" "run this button"
+```
+
+#### False values
+**Only the following values** will be considered as **false** (ignore case):
+* **False**
+* **0** (zero),
+* **None**
+* **Null**
+* **N/A**
+* Empty String ( **""** or **''** )
+
+Example: 
+``` bash
+# Do not run any buttons
+$ py dextools-clicker https://www.dextools.io/app/ everape 50 30 false False 0 None null n/a "" ''
+```
+
+### Not found button
+
+If the program does **not find** a specified **button** to use, the program will **not stop**.
+
+You can **check the history** of which **buttons** were **used** on each page, as well as which **buttons** were **not found**, in the **.log** file
+
+## config.json
+
+The config.json file contains the proxy settings.
+Its structure is as follows.
+
+``` json
+{
+    "proxy_user":"your user",
+    "proxy_pass": "your password",
+    "proxy_server": "your proxy server or ip",
+    "proxy_port": "your number of port", 
+    "max_end_page": "max seconds to wait before close browser",
+    "random_links": "random links / buttons to click before search keywords"
+}
+```
 
 # Run
 
-Run the **project folder** (dextools clicker) or the **__main __.py** file, with your **python 3.9** interpreter\r
-\r
-Example: \r
-\r
-\\`\\`\\` bash\r
-$ py dextools-clicker\r
-$ py dextools clicker\\__main__.py\r
-\\`\\`\\`
+Run the **project folder** (dextools clicker) or the **__main __.py** file, with your **python 3.9** interpreter
+
+Example: 
+
+``` bash
+$ py dextools-clicker
+$ py dextools clicker__main__.py
+```
 
 
